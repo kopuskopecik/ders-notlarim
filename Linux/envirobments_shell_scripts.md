@@ -1,0 +1,190 @@
+# Variables
+### ANSWER=42
+- variable tanimlama
+
+luke@tatooine:~$ echo $ANSWER
+42
+luke@tatooine:~$ echo $ANSWERnd
+
+luke@tatooine:~$ echo ${ANSWER}nd
+42nd
+
+- olmayan bir degiskeni kullandiginizda hata alinmaz bos response doner.
+
+### set
+- tanimlanmis degiskenleri gosterir
+
+luke@tatooine:~$ set
+ANSWER=42
+BASH=/bin/bash
+BASHOPTS=checkwinsize:cmdhist:complete_fullquote:expand_aliases:extglob:extquote:force_fignore:histappend:interactive_comments:login_shell:progcomp:promptvars:sourcepath
+BASH_ALIASES=()
+[...]
+
+### export export LESS=-i
+- alt programlara da environmentin gecmesi icin kullanilir.
+
+### printenv
+- export edilmis degiskenleri gosterir.
+
+### script icindeki environment degiskenin aktarilmasi icin import edilmesi gerekir.
+
+- Similarly, suppose we have file, eg setenv, exporting variables:
+
+luke@tatooine:~$ cat setenv
+export http_proxy=http://squid:3128/
+luke@tatooine:~$ echo $http_proxy
+
+luke@tatooine:~$ sh setenv            # subshell
+luke@tatooine:~$ echo $http_proxy
+
+- If you want to set the http_proxy variable, import the script instead of executing it in a subshell:
+luke@tatooine:~$ echo $http_proxy
+
+luke@tatooine:~$ source setenv
+luke@tatooine:~$ echo $http_proxy
+http://squid:3128/
+
+- The commands below have the same effect:
+
+luke@tatooine:~$ source setenv
+luke@tatooine:~$ . setenv
+
+# environment degiskenlerin yerleri
+- /etc/profile
+- /etc/profile.d/*`
+- /etc/bash.bashrc
+- ~/.profile
+- ~/.bashrc
+
+### PS1
+- bash promptun nasil gozukecegini ayarlar,
+
+export PS1="\[\e[1;31m\]\u@\h:\[\e[1;32m\]\w\[\e[1;33m\]\$\[\e[0m\] "
+
+### Quotes
+- tekli tirnak ile cift tirnak shellde ayni etkiyi gostermez.
+- shell once degiskenlere ve glob patternslere bakar. extra spaceler kaldirilir.
+
+luke@tatooine:~$ echo $USER: we should  destroy  the death *
+luke: we should destroy the death bin Downloads PowerCodersDevops
+
+- double quotes glob pattersnleri engeller. ama degiskenleri oncelikler. Bosluklar korunur.
+
+luke@tatooine:~$ echo '$USER: we should  destroy  the death *'
+$USER: we should destroy the death *
+
+- tek tirnak ise globbingi ve variable lari engeller. bosluklar korunur.
+
+luke@tatooine:~$ echo '$USER: we should  destroy  the death *'
+$USER: we should destroy the death *
+
+- backquotes or backticks \`` icinde command yazmak mumkun
+- $() modern command yazma seklidir ama
+
+luke@tatooine:~$ touch backup-$(date +"%Y%m%d").tar.gz
+luke@tatooine:~$ ls
+backup-20200525.tar.gz  bin  Downloads  PowerCodersDevops57
+
+### shell scripting
+- bir dosyaya yazilan commandlar da calistirilabilir.
+
+### shebang
+- ilk satirda dosyanin ne turde bir dosya oldugunu belirtiyoruz.
+- #!/bin/bash
+- #!/usr/bin/python3
+- bash dosyasini calistirabilmek icin bash hello.sh
+
+### exit code
+- linuxta bir program calistiktan sonra code doner.
+- eger 0 ise hersey yolunda demektir
+- 0 eger sifir harici birsey donuyorsa sorun var demektir.
+- $? bu degeri tutar. echo $?
+
+luke@tatooine:~$ true
+luke@tatooine:~$ echo $?
+0
+luke@tatooine:~$ false
+luke@tatooine:~$ echo $?
+1
+
+luke@tatooine:~$ grep luke /etc/passwd
+luke:x:1000:1000:Luke Skywalker:/home/luke:/bin/bash
+luke@tatooine:~$ echo $?
+0
+luke@tatooine:~$ grep anakin /etc/passwd
+luke@tatooine:~$ echo $?
+1
+
+### conditions
+- genel syntax
+
+if condition
+then
+  statements
+fi
+
+if ! grep –q ^nobody: /etc/group
+then
+  groupadd nobody
+fi
+
+if test -r /etc/setenv
+then
+  . /etc/setenv
+fi
+
+- && (AND) and || (OR):
+- Combine two programs with &&: the second program will only be executed when the first succeeds
+- Similarly, combine two programs with ||: the second program will only be executed when the first fails
+
+[[ -r /etc/setenv ]] && . /etc/setenv
+grep –q ^nobody: /etc/group || groupadd nobody
+
+### Loops
+- genel syntax
+
+for counter in list
+do
+  statements
+done
+
+for counter in list; do
+  statements
+done
+
+- Example: there are a number of tar files in a directory and you want to unpack all of them. You cannot specify more than one file in a tar -f archive.tar command:
+
+for archive in *.tar; do
+  tar xvf $archive
+done
+
+luke@tatooine:~$ seq 5
+1
+2
+3
+4
+5
+
+for iter in $(seq 5); do
+  echo Iteration $iter
+  df -m /
+  sleep 15
+done
+
+- while
+
+while condition
+do
+  statements
+done
+
+while condition; do
+  statements
+done
+
+- This will try to start an ssh session until it succeeds (it waits a minute before retrying), or until the user hits Ctrl+C
+
+while ! ssh luke@alderaan; do
+  sleep 60
+done

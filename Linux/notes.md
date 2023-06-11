@@ -1,0 +1,66 @@
+### luke@tatooine:~$
+
+- luke userin ismi
+- tatooine: bilgisayarin adi
+- $: normal user
+- #: root user
+
+- commandlar case sensitive
+- commandlar flaglerden etkilenir.
+- birden fazla flagi verebiliyoruz. ayri ayri ve bitisik. Sirasi onemi degil.
+- uzun optionslar yani flagler iki dashle yazilir.
+- uzun flagler daha aciklayici oldugu icin kullanimasi tavsiye edilir.
+- bazi optionslar yani flagler icin argumanlar zorunludur. Arguman ondan sonra hemen gelmelidir.
+
+### Examples
+- ls -l -r -t
+- ls -r -l -t
+- ls -rtl
+- ls --recursive
+- ls -R
+
+### argumanli kullanimlar
+- eger flag acik yaziliyorsa arguman bosluklu ya da = isarei ile yazilir.
+
+luke@tatooine:~$ ls -w 80
+luke@tatooine:~$ ls -w80
+luke@tatooine:~$ ls --width 80
+luke@tatooine:~$ ls --width=80
+
+- postional argumanlar herhnagi bir flage bagli degildir.
+- positional argumanlar sona eklenir. zorunlu degil tavsiye.
+
+luke@tatooine:~$ ls *.py
+luke@tatooine:~$ ls -rtl *.py
+luke@tatooine:~$ ls -l *.py -r -t
+
+### !!
+- son commandi calistirir
+- !5 : 5.siradaki commandi calistirir.
+- !ls : ls ile baslayan son komutu calistirir. 
+
+### logout and exit
+- cikis yapmak icin kullanilir.
+
+### Control + D
+- Terminali kapatir.
+
+### poweroff
+- bilgisayari komple kapatir
+
+### reboot
+- Bilgisayari kapatir ve yeniden baslatir.
+- lokalde normal user icin calisir ama remotely calismasi icin root olmasi lazim.
+
+### cal 
+- takvim gosteriri
+- cal 23 04 1987 : o tarihi getirir.
+
+### sudo mandb
+- man databaseí gunceller.
+
+### whatis ls
+- ls komutunun ne yaptigini soyler
+
+### apropos
+- ne yapiyordu unuttum

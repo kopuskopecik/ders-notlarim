@@ -1,0 +1,90 @@
+# root user 
+- tum yetilere sahip
+
+# sudo -i
+- root usera gecmemizi saglar.
+
+# type 
+- bir komutun ya da dosyanin ne oldugunu anlamamizi saglar. 
+
+luke@tatooine:~$ type tail
+tail is /usr/bin/tail
+luke@tatooine:~$ type cat
+cat is hashed (/bin/cat)
+
+# echo $PATH
+- shelin programlar icin baktigi lokasyonlari gosterir.
+
+luke@tatooine:~$ echo $PATH
+/home/luke/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+# bir programi calistirabilmek icin relative ya da absolute pathi belirtilmeli. Eger PATH icinde degilse bu dosya
+
+luke@tatooine:~$ ls -F
+bin/  course/  hello/  hello.sh*
+luke@tatooine:~$ hello.sh
+hello.sh: command not found
+luke@tatooine:~$ ./hello.sh
+Hello, world!
+
+### alias
+- alias eklenmis komutlari calistirir, Ornegin biz ls komutunu calsitirdigimizda o aslinda 'ls --color=auto' bu komutu calistirir.
+
+luke@tatooine:~$ alias
+alias alert='notify-send --urgency=low [...]'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+alias l='ls -CF'
+alias la='ls -A'
+alias ll='ls -alF'
+alias ls='ls --color=auto'
+
+### ll
+- guzel bir ls cagirma metodu. Kisisel olarak onu kullaniyormus luc. Ben de sevdim.
+
+### alias olusturma
+- alias less='less -i'
+- logout oldugunda gider.
+- kalici olmasini istiyorsan ~/.bashrc or  ~/.bash_aliases buraya yazman lazim.
+
+### Input / Output yonlendirmeleri
+- Bir program calistirildiginda her zaman 3 kanal acilir. 
+- stdin: input channel
+- stout: output channel
+- stderr: hata raporlamasi
+
+### tty
+- o an calisilan terminalin adini verir
+- local icin /dev/tty1
+- SSH connection icin: /dev/pts/0
+
+### cat hello.py 0> input 1> output 2> error
+- inputlari input dosyasina yazar.
+- outputlari output dosyasina yazar.
+- hatalari error dosyasina yazar.
+
+### python3 1> deneme
+python ciktilarini deneme dosyasina yazar.
+
+### python3 1< deneme
+- stdoutu deneme dosyasina baglar.
+
+
+### sort -r < content
+- contentin ciktisini input olarak sort commandina verir.
+
+### cat < content > content.bak
+- cat contentin icerigini input olarak alip sonucu conten.bak'a yazar
+
+### >>
+- datalarin tekrar data atildiginda silinmesini istemyorsak >> kullanilir. Digerinde silip tekrar yazar. eski data gider.
+
+### Pipes |
+- sol taraftakini sag taraftakine arguman olarak verir.
+
+### du ms /home/* | sort -r
+- Tersten boyutlarina gore siralama yapar.
+
+### cat /dev/sdb1 | gzip -9 > usb.img.gz
+- usb'nin zip dosyasini cikartir

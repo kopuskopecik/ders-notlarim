@@ -1,0 +1,123 @@
+### Jobs and Process
+- bir process calisan bir programdir. tum processler ID ya da PID degerine sahiptir.
+- on planda calisan sadece bir job olabilir ama ayni anda arka planda calisan baska joblar olabilir.
+- joblar shelle baglidir.
+
+### sleep 10
+- 10 sn shellde birsey yapmazsin. on planda o calisir.
+
+### sleep 10 &
+- arka planda calisir.
+- 1 jon ID 27375 process ID
+- job ID calistigi shelle iliskilidir ama process id tum makine capinda etkindir.
+
+luke@tatooine:~$ sleep 10 &
+[1] 27375
+
+### jobs 
+- calisan joblari listeler.
+
+### kill %1 or kill 27375
+- jobi bitirmek icin kullanilir. job id ya da process id
+
+### Control + Z 
+- job durdurulur
+
+## bg
+- arka planda stop edilmis jobu baslatmak icin kullanilir.
+
+## fg %1
+- jobu on plana getirir.
+
+### daemon
+- database gibi uzun sure calisan processlere denir. Isimlerinde d gecer genelde. named (DNS), sshd (SSH) or httpd (Apache web server).
+
+### ps
+- processleri listeler
+
+[erdogan@ip-172-31-15-29 ~]$ ps
+    PID TTY          TIME CMD
+ 245454 pts/0    00:00:00 bash
+ 245724 pts/0    00:00:00 sle
+
+### ps -ef | head
+- tum calisan processleri listeler
+- UID: the (effective) user id the programming is running as.
+  PID: the process ID
+  PPID: the parent process ID
+  C: CPU usage
+  STIME: process start time
+  TIME: CPU time
+  CMD: the command line
+
+luke@tatooine:~$ ps -ef | head
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 May23 ?        00:00:03 /lib/systemd/systemd --system --deserialize 33
+root         2     0  0 May23 ?        00:00:00 [kthreadd]
+root         4     2  0 May23 ?        00:00:00 [kworker/0:0H]
+root         6     2  0 May23 ?        00:00:00 [mm_percpu_wq]
+root         7     2  0 May23 ?        00:00:00 [ksoftirqd/0]
+root         8     2  0 May23 ?        00:00:06 [rcu_sched]
+root         9     2  0 May23 ?        00:00:00 [rcu_bh]
+
+### uptime
+- systemd calismaya basladigindan beri gecen sure ile ilgili bilgileri verir.
+- the current time
+  how long the system has been running
+  how many users are currently logged on
+  the system load averages for the past 1, 5, and 15 minutes.
+
+luke@tatooine:~$ uptime
+ 23:27:36 up 3 days, 15:27,  5 users,  load average: 0.00, 0.00, 0.00
+
+### w
+- login olmus userlari gosterir
+
+luke@tatooine:~$ w
+ 23:41:58 up 3 days, 15:41,  5 users,  load average: 0.00, 0.00, 0.00
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+luke     tty1     -                Sat08    3days  0.87s  0.04s -bash
+luke     pts/0    192.168.42.16    06:52    8:13m  0.11s  0.11s -bash
+luke     pts/1    192.168.42.16    06:52   10:50m  0.04s  0.00s sshd: luke [priv]
+luke     pts/2    192.168.42.20    21:23    0.00s  0.05s  0.00s w
+luke     pts/3    192.168.42.20    21:24   33:58   0.05s  0.00s sshd: luke [priv]
+
+### grep -c processor /proc/cpuinfo
+- core sayisi
+
+### Process hiyerarsisi
+- shellin ve shellin icinde calistirilan bir programin PID numaralari olur ama shelin bir de PPID si olur. Yani parent PID
+
+### echo $$
+- sheliin PID'sini verir
+
+### ps -ef | grep $$
+- shellde calisan processleri listeler shellin PIDsine gore
+
+luke@tatooine:~$ echo $$
+8132
+luke@tatooine:~$ ps -ef | grep $$
+luke      8132  8131  0 21:23 pts/2    00:00:00 -bash
+luke      8477  8132  0 23:45 pts/2    00:00:00 ps -ef
+luke      8478  8132  0 23:45 pts/2    00:00:00 grep --color=auto 8132
+
+### Sinyaller
+- calisan bir programla iletisime gecmenin en ilkel yolu sinyal gondermektir. PID ile. kill ile yapilabilir.
+
+## kill [signal] PID
+- sinyal gonderme 
+
+### kill -l
+- sinyal cesitlerini listeler
+- default olarak 15/siradakini calisitirir.
+
+
+$ kill -l
+1) SIGHUP	 2) SIGINT	 3) SIGQUIT	 4) SIGILL	 5) SIGTRAP
+ 6) SIGABRT	 7) SIGBUS	 8) SIGFPE	 9) SIGKILL	10) SIGUSR1
+11) SIGSEGV	12) SIGUSR2	13) SIGPIPE	14) SIGALRM	15) SIGTERM
+16) SIGSTKFLT	17) SIGCHLD	18) SIGCONT	19) SIGSTOP	20) SIGTSTP
+
+$ kill -SIGKILL PID
+$ kill -KILL PID
+$ kill -9 PID

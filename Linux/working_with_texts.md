@@ -1,0 +1,130 @@
+### populer text toolari linux icin
+- vi, emacs, pico, nano
+
+### vi +NUM file-to-edit
+- belirtilen satira direk gecer.
+
+### iki mod var vimde
+- command : dosya ilk acildigina bu modta calisir.
+- input
+
+### regular expression
+- grep, awk, sed ve vim ile kullanilabiliyor.
+- perl programlama dili bunu yeni bir seviyeye tasidi.
+- case sensitive'dir.
+- https://daphnia.com/powercoders-linux-intro.html#_working_with_text bu linkte karakterlerin anlamlari var.
+
+### grep
+- genel syntax yapisi: grep [options] regex file(s)
+- egrep [options] regex file(s)
+- egrep ile extended regular expression kulanabiliyorsun.
+- egrep + grep -E
+- grep 'print' app.py
+- grep -i will ignore the case while searching
+- grep -v shows the lines that do not have a match
+- grep -l will only show the names of the files having a matching line
+- grep -L will only show the names of the files not having a matching line
+
+[erdogan@ip-172-31-15-29 vim_examples]$ grep 'sh$' inventory
+aws_zsh_completer.sh
+bash
+csh
+gettext.sh
+hash
+lchsh
+lesspipe.sh
+setup-nsssysinit.sh
+sh
+ssh
+stapsh
+tcsh
+
+
+### wc [options] file(s)
+- satir sayisi bilgisi verir
+- satir sayisi, kelime sayisi ve karakter sayisi
+- wc -l sadece satir sayisini gosterir.
+
+[erdogan@ip-172-31-15-29 vim_examples]$ wc app.py
+ 3  7 26 app.py
+
+### w --no-header
+- login bilgilerini getirir.
+
+### sort
+- dosya icerigini siralar
+- default olarak karakterlere gore siralar.
+- sort -f: ignore the case while sorting (case folding)
+- sort -r: reverse the sorting order
+- sort -n: numerical sort alphabetically: 4 > 10 numerically: 4 < 10
+- sort -k NUM: sort on field number NUM, not just at the first
+- sort -t SYM: use SYM as a field separator, instead of whitespace
+- sort -u: eliminate duplicates (unique)
+
+luke@tatooine:~$ sort -t: -k3 -n /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+
+### uniq
+- farkli olan satirlari getirir, duplicateleri bulur ya da sayar
+- uniq -u shows only unique entries (frequency = 1)
+- uniq -d shows only duplicate entries (frequency > 1)
+- uniq -c shows entries and their frequencies (count)
+
+[erdogan@ip-172-31-15-29 vim_examples]$ uniq -u app.py
+print('elma')
+a = 5
+[erdogan@ip-172-31-15-29 vim_examples]$ uniq -d app.py
+b = 7
+[erdogan@ip-172-31-15-29 vim_examples]$ uniq -c app.py
+      1 print('elma')
+      1 a = 5
+      2 b = 7
+
+### awk
+- satirda ilgili columnu getirir.
+- -F: optionsu ile ayirmati : karakterine gore yapar. Bosluk yerine
+- programlama dili gibi kullanilabiliyor
+[erdogan@ip-172-31-15-29 vim_examples]$ uniq -c app.py | awk '{print $1}'
+1
+1
+2
+
+luke@tatooine:~$ w --no-header | awk '{print $1}' | sort | uniq
+Luke
+
+luke@tatooine:~$ awk -F: '{print $3 ": " $1}' /etc/passwd
+0: root
+1: daemon
+2: bin
+3: sys
+4: sync
+5: games
+6: man
+7: lp
+8: mail
+
+luke@tatooine:~$ awk -F: '$3 == 0' /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+
+luke@tatooine:~$ awk '/^\/dev\// {print $1, $2}' /proc/mounts
+/dev/vda2 /
+/dev/loop0 /snap/core/8935
+/dev/loop1 /snap/core/9066
+
+### diff
+- dosyalari karsilastirmak icin kullanilir.
+- binary file lar icin cmp kullanilir.
+- diff3 ile 3 dosyayi kiyaslamak mumkun
+
+[erdogan@ip-172-31-15-29 vim_examples]$ diff /etc/passwd /etc/passwd-
+30d29
+< kevin:x:1003:1003::/home/kevin:/bin/bash
+

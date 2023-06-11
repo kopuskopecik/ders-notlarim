@@ -1,0 +1,214 @@
+### /
+- root klasorununu temsil eder.
+- eger bu karakterle baslarsak absolute pathi temsil eder. Baslamazsak relativeé gore hareket eder.
+
+### pwd
+- print working directory
+
+### cd
+- change directory
+- argumansis kullanilirsa home'a goturur.
+
+luke@tatooine:~$ cd /usr
+luke@tatooine:/usr$ cd bin
+luke@tatooine:/usr/bin$ cd /usr/local/
+luke@tatooine:/usr/local$ cd bin
+luke@tatooine:/usr/local/bin$
+
+### ~
+- home klasorune goturur.
+
+### HOME environment variable
+- home klasorunun degerini tasir.
+
+luke@tatooine:/usr/local$ echo $HOME
+/home/luke
+luke@tatooine:/usr/local$ cd $HOME
+luke@tatooine:~$
+
+### . ve .. 
+- current and parent klasorlerini temsil eder.
+
+### cd -
+- bir onceki klasore gider
+
+### cd ~erdogan
+- home'a goturur.
+
+### tirnak isareti olmasi ve olmamasi durumlari
+- once patterni isletir sonra neyse onu basar karakter dizisi olarak.
+
+
+luke@tatooine:~$ ls
+Desktop  Documents  Downloads  examples.desktop  Music  Pictures  Public  Templates  Videos
+luke@tatooine:~$ echo P*
+Pictures Public
+luke@tatooine:~$ echo Z*
+Z*
+luke@tatooine:~$ echo "P*"
+P*
+
+### ls -l
+- detayli liste verir.
+
+ls -l
+-rwxr-xr-- 1 luke users 8980 Apr 14 19:35 examples.desktop
+
+### -rwxr-xr-- 1 luke users 8980 Apr 14 19:35 examples.desktop
+- tire karakteri normal dosya oldugunu gosterir. d olsaydi directory olacakti.
+- rwx: set of permissions for the owner (luke)
+- r-x: set of permissions for the group (users)
+- r--: set of permissions for anybody else
+- tire isareti belirtilen iznin olmadigi anlamina gelir
+- r read, w write, x execute izni anlamina gelir.
+- 1 sayisi dosyaya giden sabit baglantilarin sayisidir.
+- 8090 bayt olarak dosya buyuklugu
+- Apr 14 19:35 en son update edilen zaman
+- example.desktop dosyanin ismi
+
+### ls -a
+- gizli dosyalari gosterir.
+
+luke@tatooine:~$ ls .*
+luke@tatooine:~$ ls -a  # <- includes . and ..
+luke@tatooine:~$ ls -A
+
+### ls -d 
+- klasoru de gosterir.
+
+### ls -t / ls -r
+- zamana ve ters siralama
+- default olarak dosya ismine gore siralar
+
+luke@tatooine:~/hello$ ls -l
+total 20
+-rwxrwxr-x 1 luke luke 8304 Apr 21 23:07 hello
+-rw-rw-r-- 1 luke luke   74 Apr 21 23:02 hello.c
+-rw-rw-r-- 1 luke luke   25 Apr 21 23:03 Makefile
+luke@tatooine:~/hello$ ls -ltr
+total 20
+-rw-rw-r-- 1 luke luke   74 Apr 21 23:02 hello.c
+-rw-rw-r-- 1 luke luke   25 Apr 21 23:03 Makefile
+-rwxrwxr-x 1 luke luke 8304 Apr 21 23:07 hello
+
+### ls -l --sort=size
+- ‘none’.‘time’, ‘size’,‘extension’,‘version’ degerlerine gore siralamak mumkun
+
+### ls -h
+- humanreadable
+
+### ls -F
+- dosya adina aciklama ekler.
+
+* Executable program
+
+/ Directory
+
+@ Symbolic link
+
+luke@tatooine:~/hello$ ls -laF
+total 28
+drwxrwxr-x 2 luke luke 4096 Apr 21 23:07 ./
+drwxr-xr-x 6 luke luke 4096 Apr 21 23:02 ../
+-rwxrwxr-x 1 luke luke 8304 Apr 21 23:07 hello*
+-rw-rw-r-- 1 luke luke   74 Apr 21 23:02 hello.c
+-rw-rw-r-- 1 luke luke   25 Apr 21 23:02 Makefile
+
+### ls *
+- klasorleri icindekilerle beraber gosterir.
+
+[erdogan@ip-172-31-15-29 ~]$ ls *
+hello.py  hello1.py  text1.txt
+
+exercises:
+batch
+
+hello:
+
+new_folder:
+example  example.txt
+
+
+### file *
+- dosyalar hakkiinda bilgi verir.
+
+### cat hello.py
+- icerigi yazar ekrana
+
+### more and less 
+- uzun textleri okumak iicn daha iyi
+- bazi kisayollar var.
+- Up/down arrow keys (enter) : Scroll up/down, one line at a time
+- PageUp/PgDown (space bar) : Scroll up/down, one screen at a time
+- Lowercase g or < : Go to the first line of the file
+- Uppercase G or > : Go to the last line of the file
+- / or ? : Search down or up
+- Lowercase n: Find next occurrence in the search direction
+- Uppercase N: Find next occurrence in the opposite direction
+- :n: Open the next document (if you specified multiple files)
+- q : Quit
+
+more hello.py
+less hello py
+
+### head and tail
+- biri basini biri sonunu gosterir.
+- head example.txt -n 40 : 40 satir gosterir
+- +3 ilk 2 satiri atlar.
+
+### tail -f filename
+- buyuyen dosyalari izlemek icin kullanisli.
+
+### file and strings
+- binary file'lar file komutu ile acmak daha iyi anlayabilmek icin.
+- file /bin/gzip
+
+  luke@tatooine:~$ file /bin/gzip
+  /bin/gzip: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/l, for GNU/Linux 2.6.32, BuildID[sha1]=c20fb9a4202c4dca13f13860b1be723d28d18c11, stripped
+  luke@tatooine:~$ strings /bin/gzip
+  /lib64/ld-linux-x86-64.so.2
+  r<yZ
+  libc.so.6
+  __stpcpy_chk
+  fflush
+  strcpy
+  fchmod
+  readdir
+ IO_putc
+
+### touch
+- dosya olusturmak icin kullanlir
+
+### rm
+- dosya silme islemi
+- -f sormaksizin siler
+- -i sorarark siler
+- -r : ic ice dosya ve klasorleri silmek icin kullanilir.
+
+### cp
+- kopyalama islemi yapar.
+- dosya ve folder kopyalar.
+- folder kopyalarken -r flagi kullanilmali. yoksa kopyalamaz. icindekilerle beraber kopyalar
+- -v hangi dosyadan ya da klasorden ne kopyalaniyor gormek istersen kullanilir.
+- -a tum timestampsler, izinler ve sahiplikler ile beraber kopyalar.
+
+### mv 
+- dosya/klasor ismi degistirmek ve dosya/klasor tasima islemi icin kullanilir.
+
+### mkdir
+- klasor olusturur.
+- -p ic ice klasorler olusturur.
+
+luke@tatooine:~$ mkdir -p /tmp/level1/level2/
+
+### rmdir
+- bos klasorleri siler
+
+### du
+- klasorleri ve dosyalari gosterir sik bir sekilde bvoyutlarina gore.
+
+du /home
+
+### proc and proc/sys and /sys
+- burda kerne ve donanim ile ilgili bilgiler var. Hassas bilgiler falan.
+
