@@ -43,7 +43,7 @@
 
 ### B
 - 172.16.0.0 - 172.31.255.255
-- Default subnet degeri255.255.0.0 /16
+- Default subnet degeri 255.255.0.0 /16
 - 172 ile baslar
 
 ### C
@@ -61,16 +61,15 @@
 
 ### Subnet
 - Bir Ip adresininin hangi Networkte oldugunun belirlenmesi icin kullanlir.
-- default subnette kac tane 1 varsa o kadar 8 ekleniyor gosterim icin.
-- Her 255 1 dir.
-- network ve hostlar icin ayri bolumler olur.
+- default subnette kac tane 1 varsa o kadar 8 ekleniyor gosterim icin. CIDR denizor bu gosterim sekline.
+- Her 255  sekiy adet 1 dir.
+- network ve hostlar icin ayri bolumler olur bir IPInin icinde.
 - class A icin: 255.0.0.0 : 255 network icin 0'lar ise hostlar icin ayrilmistir.
 - Network kismindan ayni agda olup olmadigini anlar hostlar.
 - Subnet eklemesi soldan saga dogru yapilir.
 - Prefix subnet kismini gosterir.
 - sol tarafta kac tane 1 varsa subnet o sayi ile gosterilir.
 - Subnete gore cihaz sayisi degisir.
-- 32 bitten olusuyor.
 - subnet sayesinde bir IP adresinin Networkunu, broadcast adresini, kullanilabilir ilk ve son adresini bulabiliyoruz.
 
 192.168.1.19 / 24 (CIDR)
