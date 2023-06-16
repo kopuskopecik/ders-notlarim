@@ -1,18 +1,18 @@
 # Docker
 - 2013 senesinde Docker ortaya cikti.
-- Gemi limanlarinda konteynir indiren bindiren kisisler demek.
+- Gemi limanlarinda konteynir indiren bindiren kisiler demek.
 - Go dili ile yazildi.
-- 2016 windows destegi geldi.
+- 2016 ylinda windows destegi geldi.
 
 ### Bilgisayar Parcalari
 - CPU:
-- RAM: ustunde gecicic olarak bilgi tutmak ve CPU'ya aktarir.
+- RAM: ustunde gecicic olarak bilgi tutar ve CPU'ya aktarir.
 - BIOS: Basic Input- Outout System, bir yazilim. Bilgisayar acildiginda diger donanimlari islemciye tanitir. Ayrica isletim sistemi baslangic ogelerinin HDD, CD-ROM gibi suruculerden yuklanmesini saglar.
 
 ### Kernel
 - Isletim sistemi 3 bilesenden olusur
-- Kernel, kullanici ara yuzu ve uygulamalar.
-- BIOS bilgisayar acildiginda boot loader dedigimiz bit uygulamayi yukler. bu da kerneli ekler yani cekirdegi. Donanim ile calisan uygulamalar arasinda bir katmandir. Donanimi yonetmektir. Uygulama Kernelle iletisime gecer. Bu kismi kernel halleder. operating systemin kalbidir.
+- Kernel, kullanici ara yuzu ve uygulamalar arasindaki islemleri yonetir.
+- BIOS bilgisayar acildiginda boot loader dedigimiz bir uygulamayi yukler. bu da kerneli ekler yani cekirdegi. Donanim ile calisan uygulamalar arasinda bir katmandir. Donanimi yonetmektir amac. Uygulama Kernelle iletisime gecer. Bu kismi kernel halleder. operating systemin kalbidir.
 
 ### Virtulization - Sanallastirma
 - Sunucu hizmet saglayan yapi.
@@ -27,19 +27,19 @@
 
 ### Container
 - Linux cekirdegi uzerine arayuz ve programlar ekleyip paketlersen buna distro deniyor. Redhat, Debian, Centos gibi.
-- namespaces eklendi cekirdege. Processleri izole etme ozelligi geldi.
+- namespaces eklendi cekirdege 2010 yilinda. Processleri izole etme ozelligi geldi.
 - control groups eklendi. processeslerin kaynak tuketimini kisitlamayi sagliyor temelde.
-- containerlar izole bir sekilde uygulamalar calistirabilir. Kendi kerneli yoktur. Yuklu olduklari operating sistemin kernelini kullanirlar. 
+- containerlar ile izole bir sekilde uygulamalar calistirabilir. Kendi kerneli yoktur. Yuklu olduklari operating sistemin kernelini kullanirlar. 
 
 ### Docker Engine
 - Docker daemon, Rest API ve Docker CLI'dan olusur.
 - Docker daemon: Ana yonetim merkezi.
-- Rest API: Dockwer CLI ile daemon arasinda iletisim saglanan kisim.
+- Rest API: Dockwer CLI ile daemon arasinda iletisim saglayan kisim.
 - Docker CLI: Disardan Docker daemonu yonetmemizi saglar. Baska bir bilgisayardan da yonetebilirsin farkli bir yerde yuklu olan bir dockeri.
-- conatiner, image, data volume ve netrwork ile docker CLI ile iletisim kurar.
+- Container, image, data volume ve network ile docker CLI ile iletisim kurar.
 - Iki tip Engine vardir.
-- Docker Engine Enterprise: Bazi guvenlik onlemleri var. Musteri hizmetleri falan var.
-- Docker Engine Community: Ucretsiz her zaman kullandigimiz versiyon. Mirandes firmasina satildi.
+- Docker Engine Enterprise: Bazi guvenlik onlemleri var. Musteri hizmetleri falan var. Ucretli.
+- Docker Engine Community: Ucretsiz her zaman kullandigimiz versiyon. Mirandes firmasina satildi. Bizim kullandigimiz bu.
 - Docker daemon linuxta calisir.
 
 ### Image ve Container nedir?
@@ -50,28 +50,28 @@
 - Container bir tek isletim sistemi ile calisir. Kendi icinde isletim istemine ihtiyac duymaz.
 - Sanal Makine ise hypervisor yazilimi ile birden fazla isletim sistemini tek bir bilgisayar uzerine kurulur.
 - Containerlar daha hizli calisir.
-- paketleme isi containerlarla daha kolaydir.
+- Paketleme isi containerlarla daha kolaydir.
 
 ### Windiws Containers
 - 2016 yilinda hayatimiza girdi.
 - Kullanim bakimindan buyuk farklar yok.
 
 ### Docker Versiyonlari
-- Windows ve Mac icin bazi linux sanal makine ve baziprogramlari yukler docker kullanabilmek icin.
+- Windows ve Mac icin bazi linux sanal makine ve bazi programlari yukler docker kullanabilmek icin.
 - Linux icin Docker Engin CE
 - Windows icin Docker Desktop for Windows
 - Mac icin Docker Desktop for Windows windows 10 icin
 - Windows 7-8 ve 10 Home icin Docker Toolbox kurulmalidir.
-- her yedi ayda bir major versiyon cikarir community olan.
+- Her yedi ayda bir major versiyon cikarir community olan.
 
 ### Docker Hub
-- Imagelarimizi burda depolyabiliyoruz private ve public olarak.
+- Imagelarimizi burda depolayabiliyoruz private ve public olarak.
 - Docker varsayilan olarak buraya bakar.
 - Resmi image'lar burda tutulur.
 - Bir tane private image saklamamiza izin verir. Sonrasi parali.
 - Public bir cloud servisidir.
 
 ### Docker CLI
-- CLI Rest API ile docker daemon ile iltisim saglar.
+- CLI Rest API ile docker daemon ile iletisim saglar.
 - Asil isi yapan docker daemondir.
 - Bir takim ayarlar yaparak cloudtaki bir docker daemon'i da yonetebiliriz. 
