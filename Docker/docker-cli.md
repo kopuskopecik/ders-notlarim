@@ -347,6 +347,81 @@ lo        Link encap:Local Loopback
 - klavyeden birseyler yazdiniz. Bu giris calistiginiz uygulamanin stdin akisina gider ve uygulamaya gonderilir. Uygulama cevabi da stdout cikisina gonderilir. Terminal bu cikisi gozledigi icin bize gosterir. Hata varsa uygulama stderr cikisna yollar. 
 - Uygulamalar ve linux komutlari, girdileri stdin alip stdou ve stderr cikisina atar
 - Loglari yakalayabilmek icin uygulamanin stderr ve stdout cikislari kullanmasi gerekir.
+- Normalde genelde servisler loglarini direkt stderr ya da stdout cikislarini yazmak yerine kendi olusturdugu dosyalar yazar. stdout cikislarina symlink ile gonderir.
+- nginxin asagidaki dosyalari linuxun icindeki sdout ve stderr'e yonlendirdigini goruyoruz.
 
-## docker logs conatinerName / conatinerID
+PS C:\Users\User> docker container run -it nginx sh
+# cd /var/log/nginx
+# ls
+access.log  error.log
+# ls -l
+total 0
+lrwxrwxrwx 1 root root 11 Jun 13 07:15 access.log -> /dev/stdout
+lrwxrwxrwx 1 root root 11 Jun 13 07:15 error.log -> /dev/stderr
+
+### docker logs conatinerName / conatinerID
 - container loglarini gorme
+
+### docker logs --help
+- logs komutu ile ilgili bilgiler
+
+### docker logs --details con1
+- bazi uygulamlaar logs saklar
+- daha detayli gormek icin kullanilir.
+
+### docker logs --t con1
+- logun olusturuldugu tarihi goster
+
+### docker logs --until 2020-04-21T----
+- bu saate kadarkileri goster
+
+### ### docker logs --since 2020-04-21T----
+- bu saatten itibaren olan loglari goster
+
+### docker logs --tail 3 con1
+- loglarin son 3 satiri gosterir.
+
+### docker logs -f con1
+- canli canli loglari gosterir. 
+
+### docker info
+- Desteklenen loglama driverlarini Log attributendan gorulebilir.
+- Normalde jsonfile uzerinden basitce okururuz.
+- Ama normalde dogrudan containerlar uzerinden loglar okunmaz.
+- tum containerlar icin loglar loglama servisine gonderilir. Ordan yonetilir.
+- Farkli loglama sistemleri eklenebilir.
+
+### docker conatiner run --log-driver splunk nginx
+- splunk sunucusuna loglar gonderilir. splunk'in ayarlanmasi yuklenmesi gerekiyor.
+
+### Docker top con1
+- Containerda calisan processleri gosterir.
+
+### docker stats con1
+- containerin ne kadar cpu memory kullaniyor onu gosterir.
+
+### docker stats
+- tum conatinerlari gosterir.
+
+### Container Cpu ve Memory Limitleri
+- Kisitlama olmazsa hosta ait tum kaynaklari kullanabilir.
+- Bu yuzden production ortamlarda bu sorunu yasamamk icin kisitlamalar getirebiliyoruz.
+
+### docker container run -d --memory=100m nginx
+- 100mb ile kisitladik conatineri
+
+### docker container run -d --memory=100m --memory-swap=200m nginx
+- 100 mb dolsa bile 200 mb daha swap sayesinde kullanabilecek.
+
+### CPU
+- Ornegin bir bilgisyar 4 core'lu 8 threadli olabiliyor. thread ise sanki 8 tane islemci takilmis gibi.
+- Dockerda ksiitlamalari bu threadler uzerinden yapiyoruz.
+
+### docker container run -d --cpus='1.5' nginx
+- 8 tane core'dan 1.5 tanesini kullanabilir.
+
+### docker container -d --cpus='1.5' --cpuset-cpus="0,3" nginx
+- 1.5 tane kullan ama sadece 0 ve 3'u kullan demek
+
+### Environment Variables
+- Isletim sistemi bazinda kullanilbilen degiskenler
