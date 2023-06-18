@@ -1,0 +1,4 @@
+FROM centos:latest
+ENTRYPOINT ["ping"]
+# bu kisim parametre entrypoint icin
+CMD ["127.0.0.1"]
