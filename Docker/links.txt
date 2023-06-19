@@ -1,7 +1,0 @@
-https://docker-curriculum.com/
-
-https://github.com/ozgurozturknet/AdanZyeDocker
-
-https://www.redhat.com/sysadmin/introduction-tmux-linux 
-https://tmuxcheatsheet.com/
-- ayni anda birden fazla terminal acmana izin veriyor ssh baglantisindan sonra
