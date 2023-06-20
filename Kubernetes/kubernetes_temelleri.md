@@ -1,0 +1,95 @@
+### Container orchestration
+- Containerlari node'larla birlikte yonetmemizi kolaylastiran yapi
+- Kubernetes bu isi yapiyor.
+
+### Kubernetes
+- Gemi dumencisi demek yunancada
+- 2015 yilinda 1.0 versiyonu ile birlikte Google CNCF'e aktardi.
+- CNCF buyuk kuruluslarin Microsoft, Google, ... uye oldugu kar amaci gutmeyen bir kurulus.
+- Cloud Native Computing Foundation
+- Declarative Configuration ve Otomasyon ozelligi var.
+- Ucretsizdir.
+- Acik kaynaktir herkes katki verebilir.
+- Moduler yapida her modul kendis isine odaklanmis durumda.
+- Moduller update edilebilir ve yeni moduller yazilabilir durumda.
+- Imprerative Yontem: Tek tek ne yapilacagini soyleme yontemi.Nasil yapilacak?
+- Declarative: Beyan yontemi, yani su su ozelliklerde birsey istemek. Nasil yapilacagina kubernetes karar veriyor. Ne yapilacak? sorusunun cevabi
+- Desired State: Istenen ozellikler (deklare edilen). image ismi. kac container calisacak. hangi port gibi ozellikler
+- Current State: O anki durum. Eger bu state desired state'in istediklerini karsilamiyorsa hemen karsilamaya calisir. Kubernetes calisma mantigi boyle.
+
+### Kubernetes Compenentleri
+- Microservice yapisi var. Moduler.
+
+### kube-apiserver
+- Kontrol paneli tarafinda calisir. Giris noktasi. 
+- Kubernetes API'ini ortaya cikarir.
+- Node ve diger tum componentlerin direkt iletisim kurabildigi tek komponenttir.
+- Kubectl komutlari ile iletisim kurulan yerdir de.
+- Rest cagrilari ile curl ile kubernetes ile iletisim kurmak mumkun. Ama bunu scriptler icerisnden yapmak eger ihtiyac varsa daha mantikli.
+
+### etcd
+- tum cluster bilgisi, metadata bilgisi ve olusturulan tum kubernets objectlerinin bilgisi burda key value seklinde tutulur. Veri deposudur.
+- Kubernetes'in calismasi icin tum gerekli bilgiler burda tutulur.
+- Diger componentler etcd ile dogrudan haberlesemezler. Bunu API kube-apiserver araciligi ile yaparlar.
+- Mutalaka backup'inin alinmasi gerekir.
+
+### kube-scheduler
+- yeni olusturulan podlari izler.
+- node atamasi yapilmamis Pod'lari uzerinde calisacaklari bir node secer.
+- pod'un gereksinimlerine gore en uygun node'u secer.
+
+### c-m kube-controller manager
+- Her kontroller ayri bir surectir.
+- Tek bir binary olarak derlenmistir.
+- Tek bir process olarak calisir
+- Bu kontrollerlar: Node controller, Job controller, Service & Account Controller ve Endpoints controller
+- Desired State ile Current State'i etcd de yer alan bilgilere kontrol eder. Ordaki bilgilere gore yeni pod acar, kapatir veya gunceller.
+- Izleme yapar.
+- Azure, AWS gibi cloud hizmetleri ile iletisim kurulabilmesini saglayan cloud controller manager da bulunur.
+
+### Master node
+- c-m, api, etcd ve scheduler burda calisir.
+- Uzerinde is yuku koymak mantikli degil.
+- Kubernetesin yonetilen yer
+
+### Worker Node
+- Podlarin calistigi yer
+- 3 Temel component bulunur her node'ta. Container run time, kubelett ve kube-proxy.
+- Container run time vardir iclerinde. Containerlari calistirmaktan sorumlu.
+- Kubernets run time olarak, Docker, containerd ve CRI-Oýu destekler.
+- cri-o hafif bir container run time''dir Kubernetes icin. Openshift bunu kullaniyor yanlis hatirlamiyorsam.
+- kubernetes default olarak containerd kullanilir.
+
+### Kubelet
+- Her node'ta calisan bir agent'tir.
+- pod icerisnde tanimlanan containerlarin calistirilmasini saglar.
+- Api server araciligiyla etcd''yi kontrol eder ve schedulara gore podu acar, kapatir ya da update eder.
+
+### kube-proxy
+- containerlarin tcp, udp gibi tarfik akislarini yonetir.
+- nodelar ustunde ag kurallarini yonetir.
+- Clusterin icinden veya disindan Podlarla olan ag iletisiine izin verir.
+
+### Kubernets yayin dongusu - versiyon
+- 1.21.0
+- 1 major, 21 minor, 0 patch numarasi
+- 4 ayda bir minor cikartir.
+- her ay patch versiyonu ayda bir cikar.
+- Her minor versiyon 12 ay boyunca desteklenir.
+- patchlerle hatalar ve guvenlik aciklari giderilir.
+
+### kubectl
+- Cluster ile iletisim kurmamizi saglayan kubernetes CLI aracidir.
+- Bunu operating sistemimize gore kurmamiz gerekir.
+
+### kubernetes GUI
+- gui ile de kubernetes'i yonetmek mumkun. Ama herseyi burdan yapmak zor.
+
+### Kubernetes yukleme
+- test ve gelistirme icin docker desktop ya da minikube
+- production icin: kubeadm, kubespray, rke, k0s, ve daha fazlasi, Bunlarla da kurulum yapmak mumkun.
+- Public cloud mamnaged Kubernetes: Azure Kubernetes service(AKS), Google Kubernetes Engine, Amazon EKS, production ve test icin uygun. master kismi cloud saglayici tarafindan saglanir.
+
+
+
+
