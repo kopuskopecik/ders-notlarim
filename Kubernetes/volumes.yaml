@@ -1,0 +1,69 @@
+### emptyDir
+apiVersion: v1
+kind: Pod
+metadata:
+  name: emptydir
+spec:
+  containers: # iki container var. Amacimiz ayni pod icindeki containerlarin emtyDir volume'na baglanabildigini gostermek. 
+  - name: frontend
+    image: ozgurozturknet/k8s:blue
+    ports:
+    - containerPort: 80
+    livenessProbe:
+      httpGet:
+        path: /healthcheck
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 5
+    volumeMounts:
+    - name: cache-vol # alttaki volume'in ismi
+      mountPath: /cache # container icinde baglanilacak yer.
+  - name: sidecar
+    image: busybox
+    command: ["/bin/sh"]
+    args: ["-c", "sleep 3600"]
+    volumeMounts:
+    - name: cache-vol # alttaki volume'in ismi
+      mountPath: /tmp/log # container icinde baglanilacak yer.
+  volumes: # spec altinda tanimlaniyor. container icinde degil
+  - name: cache-vol # volume ismi
+    emptyDir: {}
+
+---
+### hostPath
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpath
+spec:
+  containers:
+  - name: hostpathcontainer
+    image: ozgurozturknet/k8s:blue
+    ports:
+    - containerPort: 80
+    livenessProbe:
+      httpGet:
+        path: /healthcheck
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 5
+    volumeMounts:
+    - name: directory-vol
+      mountPath: /dir1 # container icinde mount edilen yer
+    - name: dircreate-vol
+      mountPath: /cache # container icinde mount edilen yer
+    - name: file-vol
+      mountPath: /cache/config.json # container icinde mount edilen yer
+  volumes:
+  - name: directory-vol
+    hostPath:
+      path: /tmp # worker node ustundeki klasor, Bu dosya orda var
+      type: Directory # 
+  - name: dircreate-vol
+    hostPath:
+      path: /cache
+      type: DirectoryOrCreate # bu folder varsa kullan yoksa kulllan
+  - name: file-vol
+    hostPath:
+      path: /cache/config.json 
+      type: FileOrCreate # dosya varsa onu kullan yoksa olustur.
