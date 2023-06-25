@@ -1,0 +1,177 @@
+apiVersion: v1 # Kubernets API'da hangi API oldugunu gosterir. 
+#Kafamiza gore verdigimiz birsey degil. Her kubernetes objectisi icin ayri API vardir. 
+#Bunu dokumantasyondan ya da explain komutuyla ogrenmek mumkun.
+
+kind: Pod # ne Object olusturmak isteniyorss buraya yazilir.
+metadata: # object ile ilgili uniqe bilgileri tanimladigimiz kisim.
+# Objectir ve altinda birden fazla bilgi tanimlanablir.
+  name: firstpod # podun ismi
+  labels: # etiket tanimlama
+    app: frontend # cok onemli.
+    team: developer
+spec: # her obje kismina gore key degerler degisir. Ozeldir.
+  containers: # konteynir bilgileri burda girilir
+  - name: nginx # containerin ismi
+    image: nginx:latest # image
+    ports:
+    - containerPort: 80 # containerdan acilacak port
+
+---
+# ImagepullbackOff hatasini alma
+apiVersion: v1
+kind: Pod
+metadata:
+  name: imageerrorpod
+spec:
+  containers:
+  - name: imageerrorcontainer
+    image: enignx
+---
+### restartPolicy: Never kullanimi
+apiVersion: v1
+kind: Pod
+metadata:
+  name: succeededpod
+spec:
+  restartPolicy: Never ### container durursa bir daha run etmez.
+  # Hata vermezse completed'a gecer.
+  # Hata verirse Error verir ve kapatir. Tekrar acmaya calismaz.
+  containers:
+  - name: succeedcontainer
+    image: ubuntu:latest
+    command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 20'] # container icinde calistirilacak uygulamayi biz belirliyoruz burda.
+
+---
+###  restartPolicy: Always kullanimi 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: crashloopbackpod
+spec:
+  restartPolicy: Always # Hata vermezse container kapanirsa Completed olur ama yine de tekrar pod acilir.
+  # Ama hata vermese bile CrashLoopBackOff'a duser. 5 dakikada bir tekrar acilir.
+  containers:
+  - name: crashloopbackcontainer
+    image: ubuntu:latest
+    command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 20']
+
+---
+### Tek podta birden fazla container acma
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multicontainer
+spec:
+  containers:
+  - name: webcontainer
+    image: nginx
+    ports:
+      - containerPort: 80
+    volumeMounts:
+    - name: sharedvolume
+      mountPath: /usr/share/nginx/html # container icindeki baglanan folder
+  - name: sidecarcontainer
+    image: busybox
+    command: ["/bin/sh"] # 15 saniyede bir github reposundaki html dosyasini var/log folder'ina indirecek. 
+    # ardinda da bunu volume ile paylasacak.
+    args: ["-c", "while true; do wget -O /var/log/index.html https://raw.githubusercontent.com/ozgurozturknet/hello-world/master/index.html; sleep 15; done"] ## yukaridaki komuta arguman olarak gecer
+    volumeMounts:
+    - name: sharedvolume
+      mountPath: /var/log # container icinde baglanan yer
+  volumes:
+  - name: sharedvolume # iki container'in da baglandigi volume.
+    emptyDir: {}
+
+---
+
+# Init container kullanimi
+apiVersion: v1
+kind: Pod
+metadata:
+  name: initcontainerpod
+spec:
+  containers:
+  - name: appcontainer
+    image: busybox
+    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+  initContainers:
+  - name: initcontainer
+    image: busybox
+    command: ['sh', '-c', "until nslookup myservice; do echo waiting for myservice; sleep 2; done"] 
+    # shell calistir.
+    # nslookup ile myservice bak
+    # eger cevap donmezse ekrana ' waiting for myservice' yazdir.
+    # iki saniye bekle.
+    # nslookup cevap alana kadar bu islem gerceklesir.
+    # ardindan kendini kapatacak.
+
+---
+
+### Label kullanimi
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod1
+  labels: # label olusturma sekli
+    app: firstapp
+    tier: frontend
+    mycluster.local/team: team1
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+---
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod11
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+  nodeSelector: # calisacak nodun belirlendigi yer. Istersek defaul calisacak node'u bu sekilde degistirmek mumkun.
+    hddtype: ssd # kubescheduler su denmis oluyor. node'ta hddtype ssd olan node'u bul. bunu orda calistir demek.
+
+
+---
+### Annotation
+apiVersion: v1
+kind: Pod
+metadata:
+  name: annotationpod
+  annotations: # annotation kismi
+    owner: "Ozgur OZTURK"
+    notification-email: "admin@k8sfundamentals.com"
+    releasedate: "01.01.2021"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  containers:
+  - name: annotationcontainer
+    image: nginx
+    ports:
+    - containerPort: 80
+
+---
+### namespace
+apiVersion: v1
+kind: Namespace # namespace olusturma
+metadata:
+  name: development
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: development # namespace atama
+  name: namespacepod
+spec:
+  containers:
+  - name: namespacecontainer
+    image: nginx:latest
+    ports:
+    - containerPort: 80

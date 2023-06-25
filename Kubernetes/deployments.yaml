@@ -1,0 +1,79 @@
+### Deployment template
+apiVersion: apps/v1 # api
+kind: Deployment # deployment tipini secme
+metadata:
+  name: firstdeployment # isim verme
+  labels: # label verme
+    team: development
+spec: # 
+  replicas: 3 # pod sayisi
+  selector: # deployment objecti hangi podlar bana ait bilgisini selector altindaki labellerle yapar.
+    matchLabels:
+      app: frontend
+  template: # podlarin ozelliklerini belirledigimiz yer
+  # bundan sonraki kisim podun metadata'dan sonrasi ile ayni.
+  # Sadece name yok.
+    metadata:
+      labels:
+        app: frontend # eslesme saglandi. selectorda bulunan labeller burda da olmali tam eslesme icin.
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+---
+### Rollout ve Rollback
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rcdeployment
+  labels:
+    team: development
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: recreate
+  strategy:
+    type: Recreate #rollout stratejisi belirlenir deployment objecti update edildiginde.
+    # Iki adet var. Recreate: tum podlar silindikten sonra yenilerini acmaya baslar. Bu ilk versiyon ile yeni versiyonun birlikte calismasinin tehikeli oldugu durumlarda kullaniriiz.
+    # RollingUpdate: Varsayilan budur. podlar sileme eklem islemlerini beraber yapar.
+  template:
+    metadata:
+      labels:
+        app: recreate
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+---
+### Rolling
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rolldeployment
+  labels:
+    team: development
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: rolling
+  strategy:
+    type: RollingUpdate # ayni anda yeni ve eski versiyonlar beraber calisir.
+    rollingUpdate:
+      maxUnavailable: 2 # 2 pod silme ilk asamada.Varsayilan deger yuzde 25tir. Bu orenk icin ilk basta 8e dusecektir. Onun altina dusmez.
+      maxSurge: 2 # fazladan 2 pod olusturabilir. Bu ornek icin pod sayisi 12 olarak devam eder.
+  template:
+    metadata:
+      labels:
+        app: rolling
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
