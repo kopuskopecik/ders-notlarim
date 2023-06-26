@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysqlclaim
+spec:
+  accessModes:
+    - ReadWriteOnce # PV ile ayni
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: ""
+  selector:
+    matchLabels:
+      app: mysql # bu PV ile eslesmeli

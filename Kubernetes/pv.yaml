@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+   name: mysqlpv # PV'un ismi
+   labels: 
+     app: mysql # bu kisim onemli PVC ile buna gore eslesiyor
+spec:
+  capacity:
+    storage: 5Gi # boyut
+  accessModes:
+    - ReadWriteOnce # tek bir poda baglanabilir.
+  persistentVolumeReclaimPolicy: Recycle # Productionda Retain kalir. 
+  nfs:
+    path: / # nfs serverda baglanacagi klasor
+    server: 10.255.255.10 # IP adresi
