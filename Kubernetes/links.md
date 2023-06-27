@@ -16,3 +16,10 @@
 
 ### Yaml resmi site 
 - https://yaml.org/
+
+### Cronjob zaman ayarlama
+- https://crontab.guru/
+
+### Kubernetes dashboardlar
+https://github.com/kubernetes/dashboard
+https://k8slens.dev/

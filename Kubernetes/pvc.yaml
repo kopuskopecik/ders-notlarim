@@ -13,3 +13,17 @@ spec:
   selector:
     matchLabels:
       app: mysql # bu PV ile eslesmeli
+---
+### Storage class uzerinden
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysqlclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: "standarddisk" # baglanmak icin storeageclassin ismi selector yok

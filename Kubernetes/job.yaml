@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  parallelism: 2 # varsayilan degeri 1 - ayni anda kacar kacar yapacagimizi gosterir.
+  completions: 10 # varsayilan degeri 1 bu job altinda kac tane basarili pod olusturmamiz gerektigini belirtir.
+  backoffLimit: 5 # toplam kac tane job fail ederse jobun durmasini istedigimizi soyleriz. 
+  activeDeadlineSeconds: 100 # bu job 100 saniye icinde tamamlanamazsa bir hata var jobu fail et demek.
+  template:
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      restartPolicy: Never #OnFailure 

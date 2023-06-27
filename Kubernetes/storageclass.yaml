@@ -1,0 +1,12 @@
+### kendi storage classimizi olusturma
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standarddisk # ismi
+parameters:
+  cachingmode: ReadOnly
+  kind: Managed
+  storageaccounttype: StandardSSD_LRS
+provisioner: kubernetes.io/azure-disk # azure disk ozelliklerini kullan demek. Azure kullanidigimizda verilmeli.
+reclaimPolicy: Delete # baglanti kopunca herseyi sil
+volumeBindingMode: WaitForFirstConsumer # pos olusturulunca baglan
